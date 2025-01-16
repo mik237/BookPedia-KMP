@@ -2,6 +2,11 @@ package me.ibrahim.bookpedia.kmp.theme
 
 import androidx.compose.ui.graphics.Color
 
+val DarkBlue = Color(0xFF0B405E)
+val DesertWhite = Color(0xFFF7F7F7)
+val SandYellow = Color(0xFFFFBD64)
+val LightBlue = Color(0xFF9AD9FF)
+
 val primaryLight = Color(0xFF66558E)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFFE9DDFF)

@@ -2,12 +2,16 @@ package me.ibrahim.bookpedia.kmp
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import me.ibrahim.bookpedia.kmp.di.initKoin
 
-fun main() = application {
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = "BookPedia-KMP",
-    ) {
-        App()
+fun main() {
+    initKoin()
+    application {
+        Window(
+            onCloseRequest = ::exitApplication,
+            title = "BookPedia-KMP",
+        ) {
+            App()
+        }
     }
 }

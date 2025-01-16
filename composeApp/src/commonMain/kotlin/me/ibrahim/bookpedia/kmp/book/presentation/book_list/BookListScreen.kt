@@ -1,19 +1,29 @@
 package me.ibrahim.bookpedia.kmp.book.presentation.book_list
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import me.ibrahim.bookpedia.kmp.book.domain.Book
+import me.ibrahim.bookpedia.kmp.book.presentation.book_list.components.BookSearchBar
+import me.ibrahim.bookpedia.kmp.theme.DarkBlue
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun BookListScreenRoot(
-    viewModel: BookListViewModel = viewModel<BookListViewModel>(),
+    viewModel: BookListViewModel = koinViewModel<BookListViewModel>(),
     onBookClick: (Book) -> Unit
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-    BookListScreen(state =  state , onAction = { action ->
+    BookListScreen(state = state, onAction = { action ->
         when (action) {
             is BookListActions.OnBookClick -> onBookClick(action.book)
             else -> viewModel.onAction(action)
@@ -24,7 +34,23 @@ fun BookListScreenRoot(
 
 @Composable
 fun BookListScreen(
-    state:  BookListState,
+    state: BookListState,
     onAction: (BookListActions) -> Unit
 ) {
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .background(DarkBlue)
+            .statusBarsPadding()
+
+    ) {
+        BookSearchBar(
+            searchQuery = state.searchQuery,
+            onSearchQueryChange = { onAction(BookListActions.OnSearchQueryChange(it)) },
+            onImeSearch = { keyboardController?.hide() },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
