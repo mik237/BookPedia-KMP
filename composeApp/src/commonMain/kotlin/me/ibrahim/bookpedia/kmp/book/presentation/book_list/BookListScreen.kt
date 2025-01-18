@@ -1,18 +1,22 @@
 package me.ibrahim.bookpedia.kmp.book.presentation.book_list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import me.ibrahim.bookpedia.kmp.book.domain.Book
 import me.ibrahim.bookpedia.kmp.book.presentation.book_list.components.BookSearchBar
 import me.ibrahim.bookpedia.kmp.theme.DarkBlue
+import me.ibrahim.bookpedia.kmp.theme.DesertWhite
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -51,5 +55,15 @@ fun BookListScreen(
             onImeSearch = { keyboardController?.hide() },
             modifier = Modifier
         )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    color = DesertWhite,
+                    shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+                )
+        ) {
+
+        }
     }
 }

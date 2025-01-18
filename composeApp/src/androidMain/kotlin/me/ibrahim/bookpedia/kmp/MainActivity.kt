@@ -5,15 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import me.ibrahim.bookpedia.kmp.book.presentation.book_list.components.BookSearchBar
+import me.ibrahim.bookpedia.kmp.book.domain.Book
+import me.ibrahim.bookpedia.kmp.book.presentation.book_list.components.BookListItem
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +34,7 @@ fun AppAndroidPreview() {
     App()
 }
 
-@Preview(
+/*@Preview(
     backgroundColor = 0xffffffff,
     showBackground = true,
     showSystemUi = true
@@ -55,4 +50,26 @@ private fun BookSearchBarPreview() {
         onImeSearch = {},
         modifier = Modifier.fillMaxWidth()
     )
+}*/
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true
+)
+@Composable
+private fun BookListItemPrev() {
+    val book = Book(
+        id = "id",
+        title = "Discrete Mathematics",
+        ratingCount = 4,
+        authers = listOf("abc", "def"),
+        descriptions = "",
+        imageUrl = "",
+        languages = listOf("English", "Urdu"),
+        firstPublishYear = "2005",
+        averageRating = 3.5,
+        numPages = 100,
+        numEditions = 2
+    )
+    BookListItem(book = book, onClick = {})
 }
