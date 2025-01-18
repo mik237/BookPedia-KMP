@@ -3,14 +3,13 @@ package me.ibrahim.bookpedia.kmp.book.presentation.book_list
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import me.ibrahim.bookpedia.kmp.book.domain.Book
 import me.ibrahim.bookpedia.kmp.book.presentation.book_list.components.BookSearchBar
 import me.ibrahim.bookpedia.kmp.theme.DarkBlue
@@ -43,14 +42,14 @@ fun BookListScreen(
     Column(
         modifier = Modifier.fillMaxSize()
             .background(DarkBlue)
-            .statusBarsPadding()
-
+            .statusBarsPadding(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         BookSearchBar(
             searchQuery = state.searchQuery,
             onSearchQueryChange = { onAction(BookListActions.OnSearchQueryChange(it)) },
             onImeSearch = { keyboardController?.hide() },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
         )
     }
 }

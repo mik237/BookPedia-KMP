@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -20,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -48,10 +50,11 @@ fun BookSearchBar(
         )
     ) {
         OutlinedTextField(
-            modifier = modifier
-                .widthIn(700.dp)
-                .fillMaxWidth()
-                .background(shape = RoundedCornerShape(100), color = DesertWhite),
+            modifier = modifier.padding(16.dp)
+                .background(shape = RoundedCornerShape(100), color = DesertWhite)
+                .widthIn(max = 700.dp)
+                .minimumInteractiveComponentSize()
+                .fillMaxWidth(),
             value = searchQuery,
             onValueChange = onSearchQueryChange,
             shape = RoundedCornerShape(100),
