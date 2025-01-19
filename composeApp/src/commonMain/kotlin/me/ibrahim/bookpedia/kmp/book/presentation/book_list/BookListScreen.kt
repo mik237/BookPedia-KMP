@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import me.ibrahim.bookpedia.kmp.book.domain.Book
+import me.ibrahim.bookpedia.kmp.book.presentation.book_list.components.BookList
 import me.ibrahim.bookpedia.kmp.book.presentation.book_list.components.BookSearchBar
 import me.ibrahim.bookpedia.kmp.theme.DarkBlue
 import me.ibrahim.bookpedia.kmp.theme.DesertWhite
@@ -63,7 +64,25 @@ fun BookListScreen(
                     shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
                 )
         ) {
-
+            BookList(books = books,
+                onBookClick = {})
         }
     }
+}
+
+
+private val books = (1..100).map {
+    Book(
+        id = "id $it",
+        title = "Book Number $it",
+        ratingCount = 4,
+        authers = listOf("Matthew Mathias", "def"),
+        descriptions = "",
+        imageUrl = "",
+        languages = listOf("English", "Urdu"),
+        firstPublishYear = "2005",
+        averageRating = 3.5,
+        numPages = 100,
+        numEditions = 2
+    )
 }
