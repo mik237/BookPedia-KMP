@@ -60,9 +60,9 @@ private fun BookSearchBarPreview() {
 private fun BookListItemPrev() {
     val book = Book(
         id = "id",
-        title = "Discrete Mathematics",
+        title = "Kotlin Programming",
         ratingCount = 4,
-        authers = listOf("abc", "def"),
+        authers = listOf("Matthew Mathias", "def"),
         descriptions = "",
         imageUrl = "",
         languages = listOf("English", "Urdu"),
