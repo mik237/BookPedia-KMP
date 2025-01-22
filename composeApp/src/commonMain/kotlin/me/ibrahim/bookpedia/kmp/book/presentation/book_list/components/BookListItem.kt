@@ -1,12 +1,14 @@
 package me.ibrahim.bookpedia.kmp.book.presentation.book_list.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -38,13 +40,16 @@ fun BookListItem(
         ) {
             Row(
                 modifier = Modifier
+                    .padding(horizontal = 16.dp)
                     .fillMaxWidth()
                     .height(IntrinsicSize.Min),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 BookImage()
-
-                BookTitle(modifier = Modifier.weight(1f))
+                BookTitle(modifier = Modifier
+                    .wrapContentHeight()
+                    .weight(1f))
                 Icon(
                     Icons.AutoMirrored.Filled.KeyboardArrowRight,
                     contentDescription = null,

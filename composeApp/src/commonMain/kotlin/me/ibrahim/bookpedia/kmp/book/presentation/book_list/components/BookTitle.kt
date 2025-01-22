@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
@@ -25,7 +26,7 @@ fun BookTitle(modifier: Modifier) {
 
     Column(
         modifier = modifier
-            .fillMaxHeight(),
+            .wrapContentHeight(),
         verticalArrangement = Arrangement.Center
     ) {
         Text(

@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import bookpedia_kmp.composeapp.generated.resources.Res
+import bookpedia_kmp.composeapp.generated.resources.book_error_2
 import bookpedia_kmp.composeapp.generated.resources.compose_multiplatform
 import coil3.compose.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.painterResource
@@ -51,7 +52,7 @@ fun BookImage() {
             null -> CircularProgressIndicator()
             else ->
                 Image(
-                    painter = if (result.isSuccess) painter else painterResource(Res.drawable.compose_multiplatform),
+                    painter = if (result.isSuccess) painter else painterResource(Res.drawable.book_error_2),
                     contentDescription = book.title,
                     contentScale = if (result.isSuccess) ContentScale.Crop else ContentScale.Fit,
                     modifier = Modifier.aspectRatio(
