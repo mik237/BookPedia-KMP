@@ -17,7 +17,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import bookpedia_kmp.composeapp.generated.resources.Res
 import bookpedia_kmp.composeapp.generated.resources.book_error_2
-import bookpedia_kmp.composeapp.generated.resources.compose_multiplatform
 import coil3.compose.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.painterResource
 
