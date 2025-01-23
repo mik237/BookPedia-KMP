@@ -5,8 +5,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import me.ibrahim.bookpedia.kmp.book.domain.Book
+import me.ibrahim.bookpedia.kmp.book.domain.BookRepository
 
-class BookListViewModel : ViewModel() {
+class BookListViewModel(
+    private val bookRepository: BookRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(BookListState())
     val state = _state.asStateFlow()
@@ -15,8 +18,8 @@ class BookListViewModel : ViewModel() {
             id = "id $it",
             title = "Book Number $it",
             ratingCount = 5,
-            authers = listOf("Matthew Mathias", "def"),
-            descriptions = "",
+            authors = listOf("Matthew Mathias", "def"),
+            description = "",
             imageUrl = "",
             languages = listOf("English", "Urdu"),
             firstPublishYear = "2005",
@@ -31,8 +34,8 @@ class BookListViewModel : ViewModel() {
             id = "id $it",
             title = "Book Number $it",
             ratingCount = 5,
-            authers = listOf("Matthew Mathias", "def"),
-            descriptions = "",
+            authors = listOf("Matthew Mathias", "def"),
+            description = "",
             imageUrl = "",
             languages = listOf("English", "Urdu"),
             firstPublishYear = "2005",
