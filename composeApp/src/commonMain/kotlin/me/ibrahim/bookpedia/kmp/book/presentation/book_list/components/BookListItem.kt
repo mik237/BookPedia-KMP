@@ -40,16 +40,18 @@ fun BookListItem(
         ) {
             Row(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 20.dp, vertical = 12.dp)
                     .fillMaxWidth()
                     .height(IntrinsicSize.Min),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 BookImage()
-                BookTitle(modifier = Modifier
-                    .wrapContentHeight()
-                    .weight(1f))
+                BookTitle(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .weight(1f)
+                )
                 Icon(
                     Icons.AutoMirrored.Filled.KeyboardArrowRight,
                     contentDescription = null,

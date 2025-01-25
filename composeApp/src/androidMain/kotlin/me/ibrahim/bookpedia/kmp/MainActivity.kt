@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import me.ibrahim.bookpedia.kmp.app.App
 import me.ibrahim.bookpedia.kmp.book.domain.Book
 import me.ibrahim.bookpedia.kmp.book.presentation.book_list.components.BookListItem
 
@@ -62,8 +63,8 @@ private fun BookListItemPrev() {
         id = "id",
         title = "Kotlin Programming",
         ratingCount = 4,
-        authers = listOf("Matthew Mathias", "def"),
-        descriptions = "",
+        authors = listOf("Matthew Mathias", "def"),
+        description = "",
         imageUrl = "",
         languages = listOf("English", "Urdu"),
         firstPublishYear = "2005",

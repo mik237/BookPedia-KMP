@@ -34,7 +34,7 @@ fun BookTitle(modifier: Modifier) {
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
-        book.authers.firstOrNull()?.let { autherName ->
+        book.authors.firstOrNull()?.let { autherName ->
             Text(
                 autherName,
                 style = MaterialTheme.typography.bodyLarge,

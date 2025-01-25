@@ -100,6 +100,10 @@ kotlin {
             implementation(libs.ktor.client.darwin)
         }
 
+        wasmJsMain.dependencies {
+            implementation(libs.ktor.client.js)
+        }
+
         dependencies {
             ksp(libs.androidx.room.compiler)
         }

@@ -1,19 +1,48 @@
 package me.ibrahim.bookpedia.kmp.book.presentation.book_list
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import me.ibrahim.bookpedia.kmp.book.domain.Book
 import me.ibrahim.bookpedia.kmp.book.domain.BookRepository
+import me.ibrahim.bookpedia.kmp.core.domain.onError
+import me.ibrahim.bookpedia.kmp.core.domain.onSuccess
+import me.ibrahim.bookpedia.kmp.core.presentation.toUiText
 
 class BookListViewModel(
     private val bookRepository: BookRepository
 ) : ViewModel() {
 
+    private val cachedBooks = mutableListOf<Book>()
+    private var searchJob: Job? = null
+
     private val _state = MutableStateFlow(BookListState())
-    val state = _state.asStateFlow()
-    private val books = (1..100).map {
+    val state = _state
+        .onStart {
+            if (cachedBooks.isEmpty()) {
+                observeSearchQuery()
+            }
+        }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L),
+            _state.value
+        )
+
+
+    /*private val books = (1..100).map {
         Book(
             id = "id $it",
             title = "Book Number $it",
@@ -48,7 +77,7 @@ class BookListViewModel(
     init {
         _state.value = _state.value.copy(searchResults = books)
         _state.value = _state.value.copy(favoriteBooks = favoriteBooks)
-    }
+    }*/
 
     fun onAction(actions: BookListActions) {
         when (actions) {
@@ -64,4 +93,57 @@ class BookListViewModel(
     }
 
 
+    @OptIn(FlowPreview::class)
+    private fun observeSearchQuery() {
+        state.map { it.searchQuery }
+            .distinctUntilChanged()
+            .debounce(500L)
+            .onEach { query ->
+
+                when {
+                    query.isBlank() -> {
+                        _state.update {
+                            it.copy(
+                                errorMessage = null,
+                                searchResults = cachedBooks
+                            )
+                        }
+                    }
+
+                    query.length >= 2 -> {
+                        searchJob?.cancel()
+                        searchJob = searchBooks(query)
+                    }
+                }
+
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun searchBooks(query: String) = viewModelScope.launch {
+        _state.update { it.copy(isLoading = true) }
+        bookRepository.searchBooks(query = query)
+            .onSuccess { books ->
+                cachedBooks.apply {
+                    clear()
+                    addAll(books)
+                }
+                _state.update {
+                    it.copy(
+                        searchResults = books,
+                        isLoading = false,
+                        errorMessage = null
+                    )
+                }
+            }
+            .onError { error ->
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        searchResults = emptyList(),
+                        errorMessage = error.toUiText()
+                    )
+                }
+            }
+    }
 }
