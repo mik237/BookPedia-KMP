@@ -1,57 +1,47 @@
 package me.ibrahim.bookpedia.kmp.book.presentation.book_detail
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bookpedia_kmp.composeapp.generated.resources.Res
-import bookpedia_kmp.composeapp.generated.resources.book_cover
-import bookpedia_kmp.composeapp.generated.resources.book_error_2
-import bookpedia_kmp.composeapp.generated.resources.go_back
-import coil3.compose.rememberAsyncImagePainter
-import me.ibrahim.bookpedia.kmp.theme.DarkBlue
-import me.ibrahim.bookpedia.kmp.theme.DesertWhite
-import org.jetbrains.compose.resources.painterResource
+import bookpedia_kmp.composeapp.generated.resources.description_unavailable
+import bookpedia_kmp.composeapp.generated.resources.languages
+import bookpedia_kmp.composeapp.generated.resources.pages
+import bookpedia_kmp.composeapp.generated.resources.rating
+import bookpedia_kmp.composeapp.generated.resources.synopsis
+import me.ibrahim.bookpedia.kmp.book.presentation.book_detail.components.BlurredImageBackground
+import me.ibrahim.bookpedia.kmp.book.presentation.book_detail.components.BookChip
+import me.ibrahim.bookpedia.kmp.book.presentation.book_detail.components.TitledContent
+import me.ibrahim.bookpedia.kmp.theme.SandYellow
 import org.jetbrains.compose.resources.stringResource
+import kotlin.math.round
 
 
 @Composable
 fun BookDetailScreenRoot(
-    viewModel: BookDetailViewModel,
-    onBackClick: () -> Unit
+    viewModel: BookDetailViewModel, onBackClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     BookDetailScreen(getState = { state }, onAction = { action ->
@@ -63,104 +53,109 @@ fun BookDetailScreenRoot(
     })
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun BookDetailScreen(getState: () -> BookDetailState, onAction: (BookDetailActions) -> Unit) {
-
     val state by rememberUpdatedState(newValue = getState.invoke())
 
-    var imageLoadResult by remember { mutableStateOf<Result<Painter>?>(null) }
-    val painter = rememberAsyncImagePainter(
-        model = state.selectedBook?.imageUrl,
-        onSuccess = {
-            val size = it.painter.intrinsicSize
-            imageLoadResult = if (size.width > 1 && size.height > 1) {
-                Result.success(it.painter)
-            } else {
-                Result.failure(Exception("Invalid Image Dimensions"))
-            }
-        },
-        onError = {
-            it.result.throwable.printStackTrace()
-            imageLoadResult = Result.failure(it.result.throwable)
-        })
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            modifier = Modifier
-                .widthIn(max = 700.dp)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-
-            Box(
+    BlurredImageBackground(state = state, onAction = onAction) {
+        state.selectedBook?.let { book ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.3f)
-                    .background(DarkBlue)
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 20.dp)
+                    .verticalScroll(rememberScrollState())
             ) {
-                imageLoadResult?.let { result ->
-                    if (result.isSuccess) {
-                        Image(
-                            contentScale = ContentScale.Crop,
-                            painter = painter,
-                            contentDescription = stringResource(Res.string.book_cover),
-                            modifier = Modifier.fillMaxSize()
-                                .blur(15.dp)
-                        )
+                Text(
+                    text = book.title,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
+                )
+
+                Text(
+                    text = book.authors.joinToString(),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
+                )
+
+
+                Row(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    book.averageRating?.let { rating ->
+                        TitledContent(
+                            title = stringResource(Res.string.rating),
+                        ) {
+                            BookChip {
+                                Row {
+                                    Text(text = "${round(rating * 10) / 10.0}")
+                                    Icon(
+                                        Icons.Default.Star, contentDescription = null,
+                                        modifier = Modifier.size(20.dp),
+                                        tint = SandYellow
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    TitledContent(
+                        title = stringResource(Res.string.pages),
+                    ) {
+                        BookChip {
+                            Text(text = "${book.numPages}")
+                        }
+                    }
+
+                }
+
+                if (book.languages.isNotEmpty()) {
+                    TitledContent(
+                        title = stringResource(Res.string.languages),
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                    ) {
+                        FlowRow(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .wrapContentSize()
+                        ) {
+                            book.languages.forEach { language ->
+                                BookChip(
+                                    size = ChipSize.SMALL,
+                                    modifier = Modifier.padding(2.dp)
+                                ) {
+                                    Text(
+                                        text = language.uppercase(),
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
 
-                IconButton(
-                    onClick = { onAction(BookDetailActions.OnBackClick) },
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(horizontal = 16.dp)
-                        .statusBarsPadding()
-                        .background(brush = Brush.radialGradient(listOf(Color.White.copy(alpha = 50f), Color.Transparent)))
-                ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(Res.string.go_back),
-                        tint = Color.Black
-                    )
-                }
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(0.7f)
-                    .background(DesertWhite)
-            ) {
                 Text(
-                    text = "${state.selectedBook?.authors}",
-                    style = MaterialTheme.typography.bodyLarge
+                    text = stringResource(Res.string.synopsis),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .align(Alignment.Start)
+                        .fillMaxWidth()
+                        .padding(
+                            top = 24.dp,
+                            bottom = 8.dp
+                        )
                 )
-            }
-        }
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.align(Alignment.TopCenter)
-        ) {
-            Spacer(modifier = Modifier.fillMaxHeight(0.15f))
-            ElevatedCard(
-                shape = RoundedCornerShape(8.dp),
-                elevation = CardDefaults.elevatedCardElevation(
-                    defaultElevation = 16.dp
-                )
-            ) {
-                imageLoadResult?.let { result ->
-                    Image(
-                        contentScale = if (result.isSuccess) ContentScale.Crop else ContentScale.Fit,
-                        painter = if (result.isSuccess) painter else painterResource(Res.drawable.book_error_2),
-                        contentDescription = stringResource(Res.string.book_cover),
-                        modifier = Modifier
-                            .height(270.dp)
-                            .aspectRatio(ratio = 2 / 3f)
+                if (state.isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    Text(
+                        text = if (book.description.isNullOrBlank()) {
+                            stringResource(Res.string.description_unavailable)
+                        } else book.description
                     )
                 }
             }
