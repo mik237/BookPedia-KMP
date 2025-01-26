@@ -72,12 +72,16 @@ fun BlurredImageBackground(
 
     Box(
         modifier = Modifier
-            .widthIn(max = 700.dp)
             .fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .widthIn(max = 700.dp)
+                .fillMaxWidth()
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -121,7 +125,10 @@ fun BlurredImageBackground(
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier
+                .widthIn(max = 700.dp)
+                .fillMaxWidth()
         ) {
             Spacer(modifier = Modifier.fillMaxHeight(0.15f))
             ElevatedCard(

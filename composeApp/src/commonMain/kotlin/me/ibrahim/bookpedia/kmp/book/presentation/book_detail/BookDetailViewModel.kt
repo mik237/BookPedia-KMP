@@ -28,7 +28,7 @@ class BookDetailViewModel(
         }
         .stateIn(
             viewModelScope,
-            SharingStarted.WhileSubscribed(),
+            SharingStarted.WhileSubscribed(5000L),
             _state.value
         )
 
