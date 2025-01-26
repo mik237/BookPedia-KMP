@@ -57,6 +57,7 @@ fun BookDetailScreenRoot(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun BookDetailScreen(getState: () -> BookDetailState, onAction: (BookDetailActions) -> Unit) {
+
     val state by rememberUpdatedState(newValue = getState.invoke())
 
     BlurredImageBackground(state = state, onAction = onAction) {

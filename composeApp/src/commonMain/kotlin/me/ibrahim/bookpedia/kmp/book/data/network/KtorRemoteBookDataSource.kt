@@ -3,8 +3,8 @@ package me.ibrahim.bookpedia.kmp.book.data.network
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import me.ibrahim.bookpedia.kmp.book.data.dto.BookWorkDto
 import me.ibrahim.bookpedia.kmp.book.data.dto.SearchResponseDto
-import me.ibrahim.bookpedia.kmp.book.domain.Book
 import me.ibrahim.bookpedia.kmp.core.data.safeCall
 import me.ibrahim.bookpedia.kmp.core.domain.DataError
 import me.ibrahim.bookpedia.kmp.core.domain.Result
@@ -28,6 +28,12 @@ class KtorRemoteBookDataSource(
                     "key,title,author_name,author_key,cover_edition_key,cover_i,ratings_average,ratings_count,first_publish_year,language,number_of_pages_median,edition_count"
                 )
             }
+        }
+    }
+
+    override suspend fun fetchBookDescription(bookId: String): Result<BookWorkDto, DataError.Remote> {
+        return safeCall<BookWorkDto> {
+            httpClient.get("$BASE_URL/works/$bookId.json")
         }
     }
 }

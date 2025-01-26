@@ -19,4 +19,10 @@ class DefaultBookRepository(
             .searchBooks(query, resultLimit)
             .map { dto -> dto.results.map { it.toBook() } }
     }
+
+    override suspend fun fetchBookDescription(bookId: String): Result<String, DataError.Remote> {
+        return remoteBookDataSource
+            .fetchBookDescription(bookId = bookId)
+            .map { it.description ?: "" }
+    }
 }
