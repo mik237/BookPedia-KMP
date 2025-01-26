@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -155,7 +156,11 @@ fun BookDetailScreen(getState: () -> BookDetailState, onAction: (BookDetailActio
                     Text(
                         text = if (book.description.isNullOrBlank()) {
                             stringResource(Res.string.description_unavailable)
-                        } else book.description
+                        } else book.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Justify,
+                        color = if (book.description.isNullOrBlank()) Color.Black.copy(alpha = 0.4f) else Color.Black,
+                        modifier = Modifier.padding(vertical = 8.dp)
                     )
                 }
             }
