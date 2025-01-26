@@ -4,5 +4,6 @@ import me.ibrahim.bookpedia.kmp.book.domain.Book
 
 data class BookDetailState(
     val isLoading: Boolean = true,
-    val selectedBook: Book? = null
+    val selectedBook: Book? = null,
+    val isFavorite: Boolean = false,
 )

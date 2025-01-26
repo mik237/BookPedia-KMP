@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -37,12 +39,16 @@ import androidx.compose.ui.unit.dp
 import bookpedia_kmp.composeapp.generated.resources.Res
 import bookpedia_kmp.composeapp.generated.resources.book_cover
 import bookpedia_kmp.composeapp.generated.resources.book_error_2
+import bookpedia_kmp.composeapp.generated.resources.favorits_books
 import bookpedia_kmp.composeapp.generated.resources.go_back
+import bookpedia_kmp.composeapp.generated.resources.mark_as_favorite
+import bookpedia_kmp.composeapp.generated.resources.remove_from_favorites
 import coil3.compose.rememberAsyncImagePainter
 import me.ibrahim.bookpedia.kmp.book.presentation.book_detail.BookDetailActions
 import me.ibrahim.bookpedia.kmp.book.presentation.book_detail.BookDetailState
 import me.ibrahim.bookpedia.kmp.theme.DarkBlue
 import me.ibrahim.bookpedia.kmp.theme.DesertWhite
+import me.ibrahim.bookpedia.kmp.theme.SandYellow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -131,20 +137,46 @@ fun BlurredImageBackground(
                 .fillMaxWidth()
         ) {
             Spacer(modifier = Modifier.fillMaxHeight(0.15f))
-            ElevatedCard(
-                shape = RoundedCornerShape(8.dp),
-                elevation = CardDefaults.elevatedCardElevation(
-                    defaultElevation = 16.dp
-                )
-            ) {
-                imageLoadResult?.let { result ->
-                    Image(
-                        contentScale = if (result.isSuccess) ContentScale.Crop else ContentScale.Fit,
-                        painter = if (result.isSuccess) painter else painterResource(Res.drawable.book_error_2),
-                        contentDescription = stringResource(Res.string.book_cover),
-                        modifier = Modifier
-                            .height(270.dp)
-                            .aspectRatio(ratio = 2 / 3f)
+            Box {
+                ElevatedCard(
+                    shape = RoundedCornerShape(8.dp),
+                    elevation = CardDefaults.elevatedCardElevation(
+                        defaultElevation = 16.dp
+                    )
+                ) {
+                    imageLoadResult?.let { result ->
+                        Image(
+                            contentScale = if (result.isSuccess) ContentScale.Crop else ContentScale.Fit,
+                            painter = if (result.isSuccess) painter else painterResource(Res.drawable.book_error_2),
+                            contentDescription = stringResource(Res.string.book_cover),
+                            modifier = Modifier
+                                .height(270.dp)
+                                .aspectRatio(ratio = 2 / 3f)
+                        )
+                    }
+                }
+
+                IconButton(
+                    onClick = {
+                        onAction(BookDetailActions.OnFavoriteClick)
+                    },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .background(
+                            brush = Brush.radialGradient(
+                                colors = listOf(SandYellow, Color.Transparent),
+                                radius = 70f
+                            )
+                        )
+                ) {
+                    Icon(
+                        imageVector = if (state.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        tint = Color.Red,
+                        contentDescription = if (state.isFavorite) {
+                            stringResource(Res.string.remove_from_favorites)
+                        } else {
+                            stringResource(Res.string.mark_as_favorite)
+                        }
                     )
                 }
             }
