@@ -2,24 +2,6 @@
 
 BookPedia-KMP is a Kotlin Multiplatform application demonstrating a list and detail screen with features such as searching, displaying book information, and saving favorite books. The app uses **Kotlin Multiplatform** for cross-platform development with a focus on **Android**, **iOS**, and **Desktop**. It fetches book data from the [Open Library API](http://openlibrary.org/) and provides an interface to display book lists, view details, and mark books as favorites.
 
-## Features
-- **Cross-Platform**: Android, iOS, and Desktop.
-- **Searchable Book List**: Fetch and display books based on search keywords.
-- **Detail Screen**: View detailed information about a book including title, authors, languages, and description.
-- **Favorites**: Mark books as favorites and save them to a local database. Favorite books are displayed in a separate tab.
-- **Navigation**: Smooth navigation between screens using Jetpack Compose navigation.
-- **Image Loading**: Efficient image loading for book covers using Coil.
-- **Networking**: Fetch book data using Ktor for networking.
-- **Local Database**: Store favorite books using Room.
-
-## Technologies Used
-- **Kotlin Multiplatform**: For sharing business logic and code across Android, iOS, and Desktop.
-- **Jetpack Compose**: UI framework used for building the user interface on all platforms.
-- **Ktor**: HTTP client for fetching book data from the Open Library API.
-- **Room**: Local database for storing favorite books.
-- **Coil**: Image loading library to display book cover images.
-- **Kotlinx Serialization**: JSON parsing library to decode the API responses.
-
 ## Screens
 
 ### Book List Screen
@@ -42,6 +24,24 @@ BookPedia-KMP is a Kotlin Multiplatform application demonstrating a list and det
 
 ### Book Detail Screen
 ![Book Detail Screen](screenshots/book_detail_screen.png)
+
+## Features
+- **Cross-Platform**: Android, iOS, and Desktop.
+- **Searchable Book List**: Fetch and display books based on search keywords.
+- **Detail Screen**: View detailed information about a book including title, authors, languages, and description.
+- **Favorites**: Mark books as favorites and save them to a local database. Favorite books are displayed in a separate tab.
+- **Navigation**: Smooth navigation between screens using Jetpack Compose navigation.
+- **Image Loading**: Efficient image loading for book covers using Coil.
+- **Networking**: Fetch book data using Ktor for networking.
+- **Local Database**: Store favorite books using Room.
+
+## Technologies Used
+- **Kotlin Multiplatform**: For sharing business logic and code across Android, iOS, and Desktop.
+- **Jetpack Compose**: UI framework used for building the user interface on all platforms.
+- **Ktor**: HTTP client for fetching book data from the Open Library API.
+- **Room**: Local database for storing favorite books.
+- **Coil**: Image loading library to display book cover images.
+- **Kotlinx Serialization**: JSON parsing library to decode the API responses.
 
 ## Setup & Installation
 
