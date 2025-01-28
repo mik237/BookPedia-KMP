@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import bookpedia_kmp.composeapp.generated.resources.Res
 import bookpedia_kmp.composeapp.generated.resources.book_error_2
 import coil3.compose.rememberAsyncImagePainter
+import me.ibrahim.bookpedia.kmp.core.presentation.PulseAnimation
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -48,7 +50,7 @@ fun BookImage() {
             }
         )
         when (val result = imageLoadResult) {
-            null -> CircularProgressIndicator()
+            null -> PulseAnimation(modifier = Modifier.size(60.dp))
             else ->
                 Image(
                     painter = if (result.isSuccess) painter else painterResource(Res.drawable.book_error_2),
