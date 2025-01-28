@@ -1,5 +1,6 @@
 package me.ibrahim.bookpedia.kmp.book.data.mappers
 
+import me.ibrahim.bookpedia.kmp.book.data.database.BookEntity
 import me.ibrahim.bookpedia.kmp.book.data.dto.SearchedBookDto
 import me.ibrahim.bookpedia.kmp.book.domain.Book
 
@@ -20,5 +21,38 @@ fun SearchedBookDto.toBook(): Book {
         ratingCount = ratingsCount,
         numPages = numPagesMedian ?: 0,
         numEditions = numEditions ?: 0
+    )
+}
+
+
+fun Book.toBookEntity(): BookEntity {
+    return BookEntity(
+        id = id,
+        title = title,
+        imageUrl = imageUrl,
+        authors = authors,
+        description = description,
+        languages = languages,
+        firstPublishYear = firstPublishYear,
+        averageRating = averageRating,
+        ratingCount = ratingCount,
+        numPages = numPages,
+        numEditions = numEditions
+    )
+}
+
+fun BookEntity.toBook(): Book {
+    return Book(
+        id = id,
+        title = title,
+        imageUrl = imageUrl,
+        authors = authors,
+        description = description,
+        languages = languages,
+        firstPublishYear = firstPublishYear,
+        averageRating = averageRating,
+        ratingCount = ratingCount,
+        numPages = numPages,
+        numEditions = numEditions
     )
 }

@@ -1,9 +1,18 @@
 package me.ibrahim.bookpedia.kmp.book.data.database
 
+import android.content.Context
+import androidx.room.Room
 import androidx.room.RoomDatabase
 
-actual class DatabaseFactory {
+actual class DatabaseFactory(
+    private val context: Context
+) {
     actual fun create(): RoomDatabase.Builder<FavoriteBookDatabase> {
-        TODO("Not yet implemented")
+        val appContext = context.applicationContext
+        val dbFile = appContext.getDatabasePath(FavoriteBookDatabase.DB_NAME)
+        return Room.databaseBuilder(
+            context = appContext,
+            name = dbFile.absolutePath
+        )
     }
 }

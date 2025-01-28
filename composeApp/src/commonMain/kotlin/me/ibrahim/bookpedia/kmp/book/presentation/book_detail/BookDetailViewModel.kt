@@ -13,17 +13,23 @@ import kotlinx.coroutines.launch
 import me.ibrahim.bookpedia.kmp.app.Route
 import me.ibrahim.bookpedia.kmp.book.domain.BookRepository
 import me.ibrahim.bookpedia.kmp.core.domain.onSuccess
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class BookDetailViewModel(
     private val bookRepository: BookRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private var favoriteJob: Job? = null
+
     private val bookId = savedStateHandle.toRoute<Route.BookDetail>().id
 
     private val _state = MutableStateFlow(BookDetailState())
     val state = _state
         .onStart {
+            observeFavoriteStatus()
             fetchBookDescription()
         }
         .stateIn(
@@ -32,9 +38,32 @@ class BookDetailViewModel(
             _state.value
         )
 
+    private fun observeFavoriteStatus() {
+        bookRepository
+            .isBookFavorite(bookId)
+            .onEach { isFavorite ->
+                _state.update {
+                    it.copy(isFavorite = isFavorite)
+                }
+            }
+            .launchIn(viewModelScope)
+    }
+
     fun onAction(action: BookDetailActions) {
         when (action) {
-            BookDetailActions.OnFavoriteClick -> {}
+            BookDetailActions.OnFavoriteClick -> {
+                favoriteJob?.cancel()
+                favoriteJob = viewModelScope.launch {
+                    if (state.value.isFavorite) {
+                        bookRepository.deleteFromFavorite(bookId)
+                    } else {
+                        state.value.selectedBook?.let {
+                            bookRepository.markAsFavorite(it)
+                        }
+                    }
+                }
+            }
+
             is BookDetailActions.OnSelectedBookChange -> {
                 _state.update {
                     it.copy(selectedBook = action.book)
