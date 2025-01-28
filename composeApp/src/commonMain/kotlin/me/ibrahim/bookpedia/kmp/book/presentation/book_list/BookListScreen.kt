@@ -68,11 +68,7 @@ fun BookListScreen(
     val favoriteBooksListState = rememberLazyListState()
     val favoriteBooksListScrollPosition = rememberSaveable { mutableStateOf(0) }
 
-    LaunchedEffect(state.searchResults) {
-        searchResultListState.animateScrollToItem(0)
-    }
-
-    LaunchedEffect(Unit) {
+    LaunchedEffect(state.searchResults, state.favoriteBooks) {
         searchResultListState.animateScrollToItem(searchResultListScrollPosition.value)
         favoriteBooksListState.animateScrollToItem(favoriteBooksListScrollPosition.value)
     }
