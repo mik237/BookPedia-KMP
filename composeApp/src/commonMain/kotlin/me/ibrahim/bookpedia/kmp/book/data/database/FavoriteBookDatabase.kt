@@ -1,5 +1,6 @@
 package me.ibrahim.bookpedia.kmp.book.data.database
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -10,6 +11,7 @@ import androidx.room.TypeConverters
     version = 1
 )
 @TypeConverters(StringListTypeConverter::class)
+@ConstructedBy(BookDatabaseConstructor::class)
 abstract class FavoriteBookDatabase : RoomDatabase() {
 
     abstract val favoriteBookDao: FavoriteBookDao
