@@ -27,6 +27,7 @@ class BookListViewModel(
 
     private val cachedBooks = mutableListOf<Book>()
     private var searchJob: Job? = null
+    private var favoriteBooksJob: Job? = null
 
     private val _state = MutableStateFlow(BookListState())
     val state = _state
@@ -34,50 +35,13 @@ class BookListViewModel(
             if (cachedBooks.isEmpty()) {
                 observeSearchQuery()
             }
+            observeFavoriteBooks()
         }
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000L),
             _state.value
         )
-
-
-    /*private val books = (1..100).map {
-        Book(
-            id = "id $it",
-            title = "Book Number $it",
-            ratingCount = 5,
-            authors = listOf("Matthew Mathias", "def"),
-            description = "",
-            imageUrl = "",
-            languages = listOf("English", "Urdu"),
-            firstPublishYear = "2005",
-            averageRating = 4.323454,
-            numPages = 100,
-            numEditions = 2
-        )
-    }
-
-    private val favoriteBooks = (1..4).map {
-        Book(
-            id = "id $it",
-            title = "Book Number $it",
-            ratingCount = 5,
-            authors = listOf("Matthew Mathias", "def"),
-            description = "",
-            imageUrl = "",
-            languages = listOf("English", "Urdu"),
-            firstPublishYear = "2005",
-            averageRating = 4.323454,
-            numPages = 100,
-            numEditions = 2
-        )
-    }
-
-    init {
-        _state.value = _state.value.copy(searchResults = books)
-        _state.value = _state.value.copy(favoriteBooks = favoriteBooks)
-    }*/
 
     fun onAction(actions: BookListActions) {
         when (actions) {
@@ -92,6 +56,16 @@ class BookListViewModel(
         }
     }
 
+    private fun observeFavoriteBooks() {
+        favoriteBooksJob?.cancel()
+        favoriteBooksJob = bookRepository.getFavoriteBooks()
+            .onEach { favoriteBooks ->
+                _state.update {
+                    it.copy(favoriteBooks = favoriteBooks)
+                }
+            }
+            .launchIn(viewModelScope)
+    }
 
     @OptIn(FlowPreview::class)
     private fun observeSearchQuery() {
