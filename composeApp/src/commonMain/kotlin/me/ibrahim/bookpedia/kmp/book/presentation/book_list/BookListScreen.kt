@@ -18,6 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -62,10 +64,25 @@ fun BookListScreen(
     val pagerState = rememberPagerState { 2 }
 
     val searchResultListState = rememberLazyListState()
+    val searchResultListScrollPosition = rememberSaveable { mutableStateOf(0) }
     val favoriteBooksListState = rememberLazyListState()
+    val favoriteBooksListScrollPosition = rememberSaveable { mutableStateOf(0) }
 
     LaunchedEffect(state.searchResults) {
         searchResultListState.animateScrollToItem(0)
+    }
+
+    LaunchedEffect(Unit) {
+        searchResultListState.animateScrollToItem(searchResultListScrollPosition.value)
+        favoriteBooksListState.animateScrollToItem(favoriteBooksListScrollPosition.value)
+    }
+
+    LaunchedEffect(searchResultListState.firstVisibleItemIndex) {
+        searchResultListScrollPosition.value = searchResultListState.firstVisibleItemIndex
+    }
+
+    LaunchedEffect(favoriteBooksListState.firstVisibleItemIndex) {
+        favoriteBooksListScrollPosition.value = favoriteBooksListState.firstVisibleItemIndex
     }
 
     LaunchedEffect(state.selectedIndex) {
